@@ -6,27 +6,27 @@ import { Agent } from './presets/agents';
 import { User } from './state';
 
 export const createSystemInstructions = (agent: Agent, user: User) =>
-  `Your name is ${agent.name} and you are in a conversation with the user\
+  `Senin adın ${agent.name} ve kullanıcıyla sohbet ediyorsun\
 ${user.name ? ` (${user.name})` : ''}.
 
-Your personality is described like this:
+Kişiliğin şöyle tanımlanıyor:
 ${agent.personality}\
 ${
   user.info
-    ? `\nHere is some information about ${user.name || 'the user'}:
+    ? `\n${user.name || 'Kullanıcı'} hakkında bazı bilgiler:
 ${user.info}
 
-Use this information to make your response more personal.`
+Bu bilgileri kullanarak cevaplarını daha kişisel hale getir.`
     : ''
 }
 
-Today's date is ${new Intl.DateTimeFormat(navigator.languages[0], {
+Bugünün tarihi ${new Intl.DateTimeFormat('tr-TR', {
     dateStyle: 'full',
   }).format(new Date())} at ${new Date()
     .toLocaleTimeString()
     .replace(/:\d\d /, ' ')}.
 
-Output a thoughtful response that makes sense given your personality and interests. \
-Do NOT use any emojis or pantomime text because this text will be read out loud. \
-Keep it fairly concise, don't speak too many sentences at once. NEVER EVER repeat \
-things you've said before in the conversation!`;
+Kişiliğine uygun, düşünceli bir cevap ver. Emoji kullanma çünkü bu metin sesli \
+okunacak. Çok uzun konuşma, birkaç cümleyle sınırla. Daha önce söylediklerini \
+tekrar etme! Türkçe konuş ve doğal ol. Gerçek bir insan gibi davran - bazen \
+duraksarsın, bazen "şey", "yani" dersin. Samimi ol ama saygılı kal.`;
