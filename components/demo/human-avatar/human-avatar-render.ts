@@ -297,8 +297,9 @@ const drawRealisticEyebrows = (
   for (let i = 0; i < (gender === 'female' ? 8 : 10); i++) {
     const progress = i / 7;
     const startX = leftEyePos[0] - size * 0.9 + progress * size * 1.6;
-    const startY = leftEyePos[1] - size * 0.9 + Math.sin(progress * Math.PI) * size * (gender === 'female' ? 0.2 : 0.15);
-    const angle = gender === 'female' ? (-0.3 + progress * 0.6) : (-0.4 + progress * 0.8);
+    // Raised eyebrows with angry angle - higher position and steeper angle
+    const startY = leftEyePos[1] - size * (gender === 'female' ? 1.1 : 1.3) + Math.sin(progress * Math.PI) * size * (gender === 'female' ? 0.2 : 0.1);
+    const angle = gender === 'female' ? (-0.3 + progress * 0.6) : (-0.8 + progress * 1.2); // Much steeper angle for anger
     const length = size * (0.15 + Math.sin(progress * Math.PI) * 0.1);
     
     ctx.beginPath();
@@ -311,8 +312,9 @@ const drawRealisticEyebrows = (
   for (let i = 0; i < (gender === 'female' ? 8 : 10); i++) {
     const progress = i / 7;
     const startX = rightEyePos[0] - size * 0.7 + progress * size * 1.6;
-    const startY = rightEyePos[1] - size * 0.9 + Math.sin(progress * Math.PI) * size * (gender === 'female' ? 0.2 : 0.15);
-    const angle = gender === 'female' ? (-2.8 + progress * 0.6) : (-2.7 + progress * 0.8);
+    // Raised eyebrows with angry angle - higher position and steeper angle
+    const startY = rightEyePos[1] - size * (gender === 'female' ? 1.1 : 1.3) + Math.sin(progress * Math.PI) * size * (gender === 'female' ? 0.2 : 0.1);
+    const angle = gender === 'female' ? (-2.8 + progress * 0.6) : (-2.0 + progress * -1.2); // Opposite steep angle for anger
     const length = size * (0.15 + Math.sin(progress * Math.PI) * 0.1);
     
     ctx.beginPath();
@@ -321,20 +323,53 @@ const drawRealisticEyebrows = (
     ctx.stroke();
   }
   
-  // Add angry frown lines for male
+  // Add deeper angry frown lines for male
   if (gender === 'male') {
-    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)'; // Darker frown lines
+    ctx.lineWidth = 3; // Thicker lines
     
-    // Vertical frown lines between eyebrows
+    // Deeper vertical frown lines between eyebrows
     ctx.beginPath();
-    ctx.moveTo(leftEyePos[0] + size * 0.6, leftEyePos[1] - size * 0.8);
-    ctx.lineTo(leftEyePos[0] + size * 0.6, leftEyePos[1] - size * 0.4);
+    ctx.moveTo(leftEyePos[0] + size * 0.6, leftEyePos[1] - size * 1.0);
+    ctx.lineTo(leftEyePos[0] + size * 0.6, leftEyePos[1] - size * 0.2);
     ctx.stroke();
     
     ctx.beginPath();
-    ctx.moveTo(rightEyePos[0] - size * 0.6, rightEyePos[1] - size * 0.8);
-    ctx.lineTo(rightEyePos[0] - size * 0.6, rightEyePos[1] - size * 0.4);
+    ctx.moveTo(rightEyePos[0] - size * 0.6, rightEyePos[1] - size * 1.0);
+    ctx.lineTo(rightEyePos[0] - size * 0.6, rightEyePos[1] - size * 0.2);
+    ctx.stroke();
+    
+    // Add horizontal forehead wrinkles for extra anger
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 2;
+    
+    for (let i = 0; i < 3; i++) {
+      const y = leftEyePos[1] - size * (1.4 + i * 0.2);
+      ctx.beginPath();
+      ctx.moveTo(leftEyePos[0] - size * 0.3, y);
+      ctx.lineTo(rightEyePos[0] + size * 0.3, y);
+      ctx.stroke();
+    }
+    
+    // Add crow's feet wrinkles around eyes for intensity
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.lineWidth = 1;
+    
+    // Left eye crow's feet
+    for (let i = 0; i < 3; i++) {
+      const angle = -0.5 + i * 0.3;
+      ctx.beginPath();
+      ctx.moveTo(leftEyePos[0] - size * 1.2, leftEyePos[1] + Math.sin(angle) * size * 0.3);
+      ctx.lineTo(leftEyePos[0] - size * 1.5, leftEyePos[1] + Math.sin(angle) * size * 0.5);
+      ctx.stroke();
+    }
+    
+    // Right eye crow's feet
+    for (let i = 0; i < 3; i++) {
+      const angle = 0.5 + i * 0.3;
+      ctx.beginPath();
+      ctx.moveTo(rightEyePos[0] + size * 1.2, rightEyePos[1] + Math.sin(angle) * size * 0.3);
+      ctx.lineTo(rightEyePos[0] + size * 1.5, rightEyePos[1] + Math.sin(angle) * size * 0.5);
     ctx.stroke();
   }
 };
@@ -532,6 +567,7 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
       ctx.moveTo(i * mouthWidth * 0.15, -mouthHeight * 0.35);
       ctx.lineTo(i * mouthWidth * 0.15, -mouthHeight * 0.05);
       ctx.stroke();
+    }
     }
     
     // Tongue
