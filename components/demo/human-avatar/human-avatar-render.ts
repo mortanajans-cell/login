@@ -569,7 +569,6 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
       ctx.lineTo(i * mouthWidth * 0.15, -mouthHeight * 0.05);
       ctx.stroke();
     }
-    }
     
     // Tongue
     ctx.fillStyle = '#FF6B6B';
