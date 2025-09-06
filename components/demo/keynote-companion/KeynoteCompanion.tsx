@@ -5,7 +5,7 @@
 import { useEffect, useRef } from 'react';
 import { Modality } from '@google/genai';
 
-import BasicFace from '../basic-face/BasicFace';
+import HumanAvatar from '../human-avatar/HumanAvatar';
 import { useLiveAPIContext } from '../../../contexts/LiveAPIContext';
 import { createSystemInstructions } from '@/lib/prompts';
 import { useAgent, useUser } from '@/lib/state';
@@ -15,6 +15,14 @@ export default function KeynoteCompanion() {
   const faceCanvasRef = useRef<HTMLCanvasElement>(null);
   const user = useUser();
   const { current } = useAgent();
+
+  // Determine gender based on character name
+  const getGender = (name: string): 'male' | 'female' => {
+    if (name.includes('Ayşe') || name.includes('Zeynep')) {
+      return 'female';
+    }
+    return 'male';
+  };
 
   // Set the configuration for the Live API
   useEffect(() => {
@@ -52,7 +60,11 @@ export default function KeynoteCompanion() {
 
   return (
     <div className="keynote-companion">
-      <BasicFace canvasRef={faceCanvasRef!} color={current.bodyColor} />
+      <HumanAvatar 
+        canvasRef={faceCanvasRef!} 
+        color={current.bodyColor}
+        gender={getGender(current.name)}
+      />
     </div>
   );
 }

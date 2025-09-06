@@ -504,6 +504,15 @@ header:hover .createButton {
   width: 100%;
 }
 
+.human-avatar {
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  transition: all 0.3s ease;
+}
+
+.human-avatar:hover {
+  transform: scale(1.05);
+}
+
 .counter-container {
   position: absolute;
   right: 2rem;
