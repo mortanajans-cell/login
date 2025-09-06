@@ -28,9 +28,9 @@ import { LiveAPIProvider } from './contexts/LiveAPIContext';
 import { useUI, useUser } from './lib/state';
 
 const API_KEY = process.env.GEMINI_API_KEY as string;
-if (typeof API_KEY !== 'string') {
+if (!API_KEY) {
   throw new Error(
-    'Missing required environment variable: REACT_APP_GEMINI_API_KEY'
+    'Missing required environment variable: GEMINI_API_KEY'
   );
 }
 
