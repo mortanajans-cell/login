@@ -20,7 +20,7 @@ const drawRealisticEye = (
   // Eye socket shadow
   const socketGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius * 1.5);
   socketGradient.addColorStop(0, 'rgba(0,0,0,0)');
-  socketGradient.addColorStop(1, 'rgba(0,0,0,0.1)');
+  socketGradient.addColorStop(1, gender === 'male' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.1)');
   ctx.fillStyle = socketGradient;
   ctx.beginPath();
   ctx.ellipse(0, 0, radius * 1.5, radius * 1.2, 0, 0, Math.PI * 2);
@@ -29,7 +29,7 @@ const drawRealisticEye = (
   // Eye white with realistic shape
   ctx.fillStyle = '#f8f8f8';
   ctx.beginPath();
-  ctx.ellipse(0, 0, radius * 1.3, radius * 0.9, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, radius * (gender === 'male' ? 1.2 : 1.3), radius * (gender === 'male' ? 0.8 : 0.9), 0, 0, Math.PI * 2);
   ctx.fill();
   
   // Eye white shading
@@ -38,12 +38,12 @@ const drawRealisticEye = (
   whiteGradient.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = whiteGradient;
   ctx.beginPath();
-  ctx.ellipse(0, 0, radius * 1.3, radius * 0.9, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, radius * (gender === 'male' ? 1.2 : 1.3), radius * (gender === 'male' ? 0.8 : 0.9), 0, 0, Math.PI * 2);
   ctx.fill();
   
   // Iris with realistic colors
   const irisColors = {
-    male: ['#2d4a3e', '#1a2f24', '#0f1a14'],
+    male: ['#1a3d1a', '#0d2b0d', '#051a05'],
     female: ['#4a7c8a', '#2d5a6b', '#1a3d47']
   };
   
@@ -87,27 +87,27 @@ const drawRealisticEye = (
   ctx.fill();
   
   // Upper eyelid
-  ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = gender === 'male' ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.3)';
+  ctx.lineWidth = gender === 'male' ? 3 : 2;
   ctx.beginPath();
-  ctx.ellipse(0, -radius * 0.1, radius * 1.3, radius * 0.7, 0, 0, Math.PI);
+  ctx.ellipse(0, -radius * 0.1, radius * (gender === 'male' ? 1.2 : 1.3), radius * 0.7, 0, 0, Math.PI);
   ctx.stroke();
   
   // Lower eyelid
   ctx.strokeStyle = 'rgba(0,0,0,0.2)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.ellipse(0, radius * 0.1, radius * 1.2, radius * 0.5, 0, Math.PI, Math.PI * 2);
+  ctx.ellipse(0, radius * 0.1, radius * (gender === 'male' ? 1.1 : 1.2), radius * 0.5, 0, Math.PI, Math.PI * 2);
   ctx.stroke();
   
   // Eyelashes
-  ctx.strokeStyle = gender === 'female' ? '#2c1810' : '#3c3c3c';
-  ctx.lineWidth = gender === 'female' ? 2 : 1.5;
+  ctx.strokeStyle = gender === 'female' ? '#2c1810' : '#1c1c1c';
+  ctx.lineWidth = gender === 'female' ? 2 : 1;
   ctx.lineCap = 'round';
   
-  for (let i = -4; i <= 4; i++) {
+  for (let i = -3; i <= 3; i++) {
     const x = i * radius * 0.25;
-    const length = gender === 'female' ? radius * 0.4 : radius * 0.2;
+    const length = gender === 'female' ? radius * 0.4 : radius * 0.15;
     const curve = Math.abs(i) * 0.1;
     
     // Upper lashes
@@ -199,38 +199,38 @@ const drawRealisticHair = (
       ctx.stroke();
     }
   } else {
-    // Male hair - short and neat
+    // Male hair - military buzz cut
     const hairGradient = ctx.createLinearGradient(0, centerY - radius, 0, centerY);
-    hairGradient.addColorStop(0, '#4A4A4A');
-    hairGradient.addColorStop(1, '#2C2C2C');
+    hairGradient.addColorStop(0, '#2C2C2C');
+    hairGradient.addColorStop(1, '#1A1A1A');
     ctx.fillStyle = hairGradient;
     
-    // Main hair shape
+    // Very short military cut
     ctx.beginPath();
-    ctx.ellipse(centerX, centerY - radius * 0.4, radius * 1.0, radius * 0.7, 0, 0, Math.PI);
+    ctx.ellipse(centerX, centerY - radius * 0.45, radius * 0.95, radius * 0.6, 0, 0, Math.PI);
     ctx.fill();
     
-    // Hair texture
-    ctx.strokeStyle = '#1A1A1A';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < 20; i++) {
-      const x = centerX - radius * 0.8 + (i / 20) * radius * 1.6;
-      const y = centerY - radius * 0.4 - Math.sin((i / 20) * Math.PI) * radius * 0.3;
+    // Buzz cut texture - very short stubble
+    ctx.fillStyle = '#0F0F0F';
+    for (let i = 0; i < 100; i++) {
+      const angle = Math.random() * Math.PI;
+      const distance = Math.random() * radius * 0.9;
+      const x = centerX + Math.cos(angle) * distance;
+      const y = centerY - radius * 0.45 + Math.sin(angle) * distance * 0.6;
       
       ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + Math.random() * 4 - 2, y - Math.random() * 10);
-      ctx.stroke();
+      ctx.arc(x, y, 0.5, 0, Math.PI * 2);
+      ctx.fill();
     }
     
-    // Sideburns
-    ctx.fillStyle = '#3A3A3A';
+    // Military-style sideburns - very short
+    ctx.fillStyle = '#1A1A1A';
     ctx.beginPath();
-    ctx.ellipse(centerX - radius * 0.8, centerY - radius * 0.1, radius * 0.15, radius * 0.3, 0, 0, Math.PI * 2);
+    ctx.ellipse(centerX - radius * 0.85, centerY - radius * 0.2, radius * 0.08, radius * 0.25, 0, 0, Math.PI * 2);
     ctx.fill();
     
     ctx.beginPath();
-    ctx.ellipse(centerX + radius * 0.8, centerY - radius * 0.1, radius * 0.15, radius * 0.3, 0, 0, Math.PI * 2);
+    ctx.ellipse(centerX + radius * 0.85, centerY - radius * 0.2, radius * 0.08, radius * 0.25, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 };
@@ -287,18 +287,18 @@ const drawRealisticEyebrows = (
   gender: 'male' | 'female'
 ) => {
   const browColor = gender === 'female' ? '#654321' : '#2c2c2c';
-  const browThickness = gender === 'female' ? 2 : 3;
+  const browThickness = gender === 'female' ? 2 : 4;
   
   ctx.strokeStyle = browColor;
   ctx.lineWidth = browThickness;
   ctx.lineCap = 'round';
   
   // Left eyebrow with individual hairs
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < (gender === 'female' ? 8 : 10); i++) {
     const progress = i / 7;
     const startX = leftEyePos[0] - size * 0.9 + progress * size * 1.6;
-    const startY = leftEyePos[1] - size * 0.9 + Math.sin(progress * Math.PI) * size * 0.2;
-    const angle = -0.3 + progress * 0.6;
+    const startY = leftEyePos[1] - size * 0.9 + Math.sin(progress * Math.PI) * size * (gender === 'female' ? 0.2 : 0.15);
+    const angle = gender === 'female' ? (-0.3 + progress * 0.6) : (-0.4 + progress * 0.8);
     const length = size * (0.15 + Math.sin(progress * Math.PI) * 0.1);
     
     ctx.beginPath();
@@ -308,16 +308,33 @@ const drawRealisticEyebrows = (
   }
   
   // Right eyebrow with individual hairs
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < (gender === 'female' ? 8 : 10); i++) {
     const progress = i / 7;
     const startX = rightEyePos[0] - size * 0.7 + progress * size * 1.6;
-    const startY = rightEyePos[1] - size * 0.9 + Math.sin(progress * Math.PI) * size * 0.2;
-    const angle = -2.8 + progress * 0.6;
+    const startY = rightEyePos[1] - size * 0.9 + Math.sin(progress * Math.PI) * size * (gender === 'female' ? 0.2 : 0.15);
+    const angle = gender === 'female' ? (-2.8 + progress * 0.6) : (-2.7 + progress * 0.8);
     const length = size * (0.15 + Math.sin(progress * Math.PI) * 0.1);
     
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     ctx.lineTo(startX + Math.cos(angle) * length, startY + Math.sin(angle) * length);
+    ctx.stroke();
+  }
+  
+  // Add angry frown lines for male
+  if (gender === 'male') {
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 2;
+    
+    // Vertical frown lines between eyebrows
+    ctx.beginPath();
+    ctx.moveTo(leftEyePos[0] + size * 0.6, leftEyePos[1] - size * 0.8);
+    ctx.lineTo(leftEyePos[0] + size * 0.6, leftEyePos[1] - size * 0.4);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(rightEyePos[0] - size * 0.6, rightEyePos[1] - size * 0.8);
+    ctx.lineTo(rightEyePos[0] - size * 0.6, rightEyePos[1] - size * 0.4);
     ctx.stroke();
   }
 };
@@ -377,6 +394,41 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
   const centerY = height / 2;
   const faceRadius = width / 2 - 20;
 
+  // Draw military camouflage background for male
+  if (gender === 'male') {
+    // Camouflage pattern
+    const camColors = ['#4A5D23', '#6B7C32', '#8B9A46', '#3A4A1A'];
+    
+    // Fill background with base camo color
+    ctx.fillStyle = camColors[0];
+    ctx.fillRect(0, 0, width, height);
+    
+    // Add camo spots
+    for (let i = 0; i < 15; i++) {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      const size = 20 + Math.random() * 40;
+      const colorIndex = Math.floor(Math.random() * camColors.length);
+      
+      ctx.fillStyle = camColors[colorIndex];
+      ctx.beginPath();
+      ctx.ellipse(x, y, size, size * 0.7, Math.random() * Math.PI, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Add smaller camo details
+    for (let i = 0; i < 25; i++) {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      const size = 5 + Math.random() * 15;
+      const colorIndex = Math.floor(Math.random() * camColors.length);
+      
+      ctx.fillStyle = camColors[colorIndex];
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
   // Draw hair first (behind face)
   drawRealisticHair(ctx, width, height, gender);
 
@@ -389,15 +441,40 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
     centerY,
     faceRadius
   );
-  skinGradient.addColorStop(0, '#FDBCB4');
-  skinGradient.addColorStop(0.7, '#F5A99B');
-  skinGradient.addColorStop(1, '#E8967A');
+  if (gender === 'male') {
+    // More masculine, tanned skin tone
+    skinGradient.addColorStop(0, '#D4A574');
+    skinGradient.addColorStop(0.7, '#C19660');
+    skinGradient.addColorStop(1, '#A67C52');
+  } else {
+    skinGradient.addColorStop(0, '#FDBCB4');
+    skinGradient.addColorStop(0.7, '#F5A99B');
+    skinGradient.addColorStop(1, '#E8967A');
+  }
   
   ctx.fillStyle = skinGradient;
   ctx.beginPath();
   ctx.arc(centerX, centerY, faceRadius, 0, Math.PI * 2);
   ctx.fill();
 
+  // Add facial scars for male (military look)
+  if (gender === 'male') {
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    
+    // Small scar on left cheek
+    ctx.beginPath();
+    ctx.moveTo(centerX - faceRadius * 0.3, centerY + faceRadius * 0.1);
+    ctx.lineTo(centerX - faceRadius * 0.2, centerY + faceRadius * 0.2);
+    ctx.stroke();
+    
+    // Scar on forehead
+    ctx.beginPath();
+    ctx.moveTo(centerX + faceRadius * 0.1, centerY - faceRadius * 0.4);
+    ctx.lineTo(centerX + faceRadius * 0.3, centerY - faceRadius * 0.3);
+    ctx.stroke();
+  }
   // Add facial structure
   drawFacialStructure(ctx, centerX, centerY, faceRadius);
 
@@ -465,9 +542,16 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
   } else {
     // Closed mouth - realistic lips
     const lipGradient = ctx.createLinearGradient(0, -mouthWidth * 0.3, 0, mouthWidth * 0.3);
-    lipGradient.addColorStop(0, '#CD5C5C');
-    lipGradient.addColorStop(0.5, '#B22222');
-    lipGradient.addColorStop(1, '#8B0000');
+    if (gender === 'male') {
+      // More masculine, less colorful lips
+      lipGradient.addColorStop(0, '#A0756B');
+      lipGradient.addColorStop(0.5, '#8B5A4A');
+      lipGradient.addColorStop(1, '#6B4A3A');
+    } else {
+      lipGradient.addColorStop(0, '#CD5C5C');
+      lipGradient.addColorStop(0.5, '#B22222');
+      lipGradient.addColorStop(1, '#8B0000');
+    }
     
     ctx.fillStyle = lipGradient;
     ctx.beginPath();
@@ -475,7 +559,7 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
     ctx.fill();
     
     // Lip highlight
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fillStyle = gender === 'male' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.3)';
     ctx.beginPath();
     ctx.ellipse(0, -mouthWidth * 0.1, mouthWidth * 0.8, mouthWidth * 0.15, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -491,6 +575,25 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
 
   ctx.restore();
 
+  // Add 5 o'clock shadow for male
+  if (gender === 'male') {
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    
+    // Jaw area shadow
+    ctx.beginPath();
+    ctx.ellipse(centerX, centerY + faceRadius * 0.4, faceRadius * 0.7, faceRadius * 0.3, 0, 0, Math.PI);
+    ctx.fill();
+    
+    // Upper lip shadow
+    ctx.beginPath();
+    ctx.ellipse(centerX, centerY + faceRadius * 0.25, faceRadius * 0.25, faceRadius * 0.08, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Chin shadow
+    ctx.beginPath();
+    ctx.ellipse(centerX, centerY + faceRadius * 0.6, faceRadius * 0.4, faceRadius * 0.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
   // Add realistic cheek coloring
   if (gender === 'female') {
     ctx.fillStyle = 'rgba(255, 182, 193, 0.3)';
@@ -505,7 +608,7 @@ export function renderHumanAvatar(props: HumanAvatarProps) {
   // Add subtle face contour
   const contourGradient = ctx.createRadialGradient(centerX, centerY, faceRadius * 0.7, centerX, centerY, faceRadius);
   contourGradient.addColorStop(0, 'rgba(0,0,0,0)');
-  contourGradient.addColorStop(1, 'rgba(0,0,0,0.08)');
+  contourGradient.addColorStop(1, gender === 'male' ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.08)');
   
   ctx.fillStyle = contourGradient;
   ctx.beginPath();
