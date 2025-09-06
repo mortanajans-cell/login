@@ -370,7 +370,8 @@ const drawRealisticEyebrows = (
       ctx.beginPath();
       ctx.moveTo(rightEyePos[0] + size * 1.2, rightEyePos[1] + Math.sin(angle) * size * 0.3);
       ctx.lineTo(rightEyePos[0] + size * 1.5, rightEyePos[1] + Math.sin(angle) * size * 0.5);
-    ctx.stroke();
+      ctx.stroke();
+    }
   }
 };
 
